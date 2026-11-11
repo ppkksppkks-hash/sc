@@ -13,12 +13,11 @@ jobs:
       - name: Download official Boost source
         shell: pwsh
         run: |
-          Invoke-WebRequest https://archives.boost.io/release/1.53.0/source/boost_1_53_0.tar.bz2 -OutFile boost.tar.bz2
-          $hash = (Get-FileHash boost.tar.bz2 -Algorithm SHA256).Hash.ToLower()
+          Invoke-WebRequest https://archives.boost.io/release/1.53.0/source/boost_1_53_0.zip -OutFile boost.zip
+          $hash = (Get-FileHash boost.zip -Algorithm SHA256).Hash.ToLower()
           Write-Output "Source SHA256: $hash"
-          if ($hash -ne 'f88a041b01882b0c9c5c05b39603ec8383fb881f772f6f9e6e6fd0e0cddb9196') { throw 'Source hash mismatch' }
-          7z x boost.tar.bz2 -y | Out-Null
-          7z x boost.tar -y | Out-Null
+          if ($hash -ne 'f9062177b2d0e0fe2d39883ebd32106ebeb72a8df71d789048108bf3049d76c0') { throw 'Source hash mismatch' }
+          7z x boost.zip -y | Out-Null
       - name: Probe original build with native MSVC
         shell: cmd
         run: |
@@ -26,7 +25,7 @@ jobs:
           ver
           cl 2>&1
           cd boost_1_53_0
-          call bootstrap.bat vc11
+          call bootstrap.bat
           type bootstrap.log
           if not exist b2.exe exit /b 1
           b2.exe --version
