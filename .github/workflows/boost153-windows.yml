@@ -26,7 +26,7 @@ jobs:
           ver
           cl 2>&1
           cd boost_1_53_0
-          call bootstrap.bat
+          call bootstrap.bat vc11
           type bootstrap.log
           if not exist b2.exe exit /b 1
           b2.exe --version
